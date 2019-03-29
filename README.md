@@ -41,8 +41,6 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 
 # Demo下载
 [Demo下载](http://fir.im/lmhz)
-<br>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode.png" width="180" height="180">
 
 # QQ交流群（600201778）
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
@@ -84,18 +82,18 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 dependencies {
   //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
   //该依赖仅包含MediaPlayer解码
-  implementation 'com.kk.taurus.playerbase:playerbase:3.3.4.3'
+  implementation 'com.kk.taurus.playerbase:playerbase:3.3.5'
   
   
   //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
   //注意exoplayer的最小支持SDK版本为16
-  implementation 'cn.jiajunhui:exoplayer:3343_291_008'
+  implementation 'cn.jiajunhui:exoplayer:335_291_009'
 
   
   //---------如果使用ijkPlayer解码，使用以下依赖。---------
   //该依赖包含ijkplayer解码和MediaPlayer解码
-  implementation 'cn.jiajunhui:ijkplayer:3343_088_006'
+  implementation 'cn.jiajunhui:ijkplayer:335_088_007'
   //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
   implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
   # Other ABIs: optional
@@ -187,7 +185,6 @@ public class App extends Application {
 
 ```java
 mVideoView = findViewById(R.id.videoView);
-mDataSource = new DataSource("monitor_id");
 mVideoView.setOnPlayerEventListener(this);
 mVideoView.setOnReceiverEventListener(this);
 
@@ -201,9 +198,8 @@ mVideoView.setReceiverGroup(receiverGroup);
 //设置一个事件处理器
 mVideoView.setEventHandler(new OnVideoViewEventHandler());
 
-//设置数据提供者 MonitorDataProvider
-mVideoView.setDataProvider(new MonitorDataProvider());
-mVideoView.setDataSource(mDataSource);
+//设置DataSource
+mVideoView.setDataSource(new DataSource("url...."));
 mVideoView.start();
 ```
 
@@ -477,7 +473,6 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure02.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure03.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure04.png)
-
 
 # 交流
 联系方式：junhui_jia@163.com

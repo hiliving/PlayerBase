@@ -48,6 +48,7 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
 
     private boolean hasStart;
     private RecyclerView mRecycler;
+    private SettingAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,11 +72,13 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
         mVideoView.setReceiverGroup(mReceiverGroup);
         mVideoView.setEventHandler(onVideoViewEventHandler);
         mVideoView.setOnPlayerEventListener(this);
+
+//        mVideoView.setVolume(0f, 0f);
     }
 
     private void initPlay(){
         if(!hasStart){
-            DataSource dataSource = new DataSource(DataUtils.VIDEO_URL_08);
+            DataSource dataSource = new DataSource(DataUtils.VIDEO_URL_09);
             dataSource.setTitle("音乐和艺术如何改变世界");
             mVideoView.setDataSource(dataSource);
             mVideoView.start();
@@ -87,10 +90,12 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
-                mRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-                SettingAdapter mAdapter = new SettingAdapter(this, SettingItem.initSettingList());
-                mAdapter.setOnItemClickListener(this);
-                mRecycler.setAdapter(mAdapter);
+                if(mAdapter==null){
+                    mRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+                    mAdapter = new SettingAdapter(this, SettingItem.initSettingList());
+                    mAdapter.setOnItemClickListener(this);
+                    mRecycler.setAdapter(mAdapter);
+                }
                 break;
         }
     }
@@ -130,7 +135,7 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
     };
 
     private void replay(){
-        mVideoView.setDataSource(new DataSource(DataUtils.VIDEO_URL_01));
+        mVideoView.setDataSource(new DataSource(DataUtils.VIDEO_URL_09));
         mVideoView.start();
     }
 
@@ -207,6 +212,12 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
             case SettingItem.CODE_SPEED_1:
                 mVideoView.setSpeed(1f);
                 break;
+            case SettingItem.CODE_VOLUME_SILENT:
+                mVideoView.setVolume(0f, 0f);
+                break;
+            case SettingItem.CODE_VOLUME_RESET:
+                mVideoView.setVolume(1f, 1f);
+                break;
             case SettingItem.CODE_CONTROLLER_REMOVE:
                 mReceiverGroup.removeReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER);
                 Toast.makeText(this, "已移除", Toast.LENGTH_SHORT).show();
@@ -217,6 +228,9 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
                     mReceiverGroup.addReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER, new ControllerCover(this));
                     Toast.makeText(this, "已添加", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case SettingItem.CODE_TEST_UPDATE_RENDER:
+                mVideoView.updateRender();
                 break;
         }
     }
